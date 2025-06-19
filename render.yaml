@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: anonymous-web-ui
+    env: python
+    buildCommand: "pip install -r web/requirements.txt"
+    startCommand: "python web/app.py"
+    envVars:
+      - key: PORT
+        value: 10000
