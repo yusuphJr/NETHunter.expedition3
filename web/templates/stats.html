@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bot Statistics</title>
+</head>
+<body>
+    <h2>📊 Bot Usage Statistics</h2>
+    <ul>
+        <li><strong>Total Messages:</strong> {{ stats.total_messages }}</li>
+        <li><strong>Active Users:</strong> {{ stats.active_users }}</li>
+        <li><strong>Command Usage:</strong>
+            <ul>
+                {% for cmd, count in stats.commands_used.items() %}
+                    <li>{{ cmd }}: {{ count }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+    <a href="/">⬅ Back</a>
+</body>
+</html>
