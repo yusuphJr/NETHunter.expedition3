@@ -1,0 +1,9 @@
+<h2>Media Downloader</h2>
+<form method="post">
+    <input name="keyword" placeholder="Enter keyword or link..." required>
+    <button type="submit">Download</button>
+</form>
+{% if result %}
+    <p>{{ result }}</p>
+{% endif %}
+<a href="/">⬅ Back</a>
