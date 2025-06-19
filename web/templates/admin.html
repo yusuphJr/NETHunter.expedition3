@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h2>Admin Panel: Feature Toggles</h2>
+    <form method="post">
+        <label>
+            <input type="checkbox" name="anti_delete" {% if settings.anti_delete %}checked{% endif %}>
+            Anti-Delete
+        </label><br>
+        <label>
+            <input type="checkbox" name="anti_link" {% if settings.anti_link %}checked{% endif %}>
+            Anti-Link
+        </label><br>
+        <label>
+            <input type="checkbox" name="banned_words_enabled" {% if settings.banned_words_enabled %}checked{% endif %}>
+            Banned Words Monitor
+        </label><br><br>
+        <button type="submit">💾 Save Settings</button>
+    </form>
+    <br>
+    <a href="/">⬅ Back to Dashboard</a>
+</body>
+</html>
