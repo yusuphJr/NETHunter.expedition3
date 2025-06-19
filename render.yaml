@@ -1,3 +1,4 @@
+services:
   - type: web
     name: whatsapp-frontend-ui
     env: python
@@ -18,3 +19,11 @@
     buildCommand: npm install
     startCommand: node server.js
     plan: free
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - server.js
+        - package.json
+        - package-lock.json
+        - node_modules/**/*
+        - session/**/*
