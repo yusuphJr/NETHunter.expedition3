@@ -1,0 +1,9 @@
+<h2>ChatGPT AI</h2>
+<form method="post">
+    <input name="prompt" placeholder="Ask something..." required>
+    <button type="submit">Ask</button>
+</form>
+{% if response %}
+    <p><strong>GPT:</strong> {{ response }}</p>
+{% endif %}
+<a href="/">⬅ Back</a>
