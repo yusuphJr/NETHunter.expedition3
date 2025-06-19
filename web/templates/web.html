@@ -1,0 +1,9 @@
+<h2>Web Search</h2>
+<form method="post">
+    <input name="query" placeholder="Search something..." required>
+    <button type="submit">Search</button>
+</form>
+{% if result %}
+    <p><strong>Result:</strong> {{ result }}</p>
+{% endif %}
+<a href="/">⬅ Back</a>
