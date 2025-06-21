@@ -5,6 +5,7 @@ const fs = require('fs');
 const cors = require('cors');
 const fetch = require('node-fetch');
 const { saveSession, loadSession } = require('./firebaseService');
+const db = require('./firebaseService');
 
 const app = express();
 app.use(express.json());
