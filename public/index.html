@@ -1,71 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Anonymous WhatsApp Linker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🔐 Anonymous WhatsApp Bot</title>
   <style>
-    body { background: #0e0e0e; color: #fff; font-family: sans-serif; text-align: center; margin-top: 50px; }
-    button, input { padding: 10px; font-size: 16px; margin: 10px; }
-    #qr img { width: 300px; height: auto; border: 2px solid #0f0; }
-    #status { margin-top: 15px; color: #0f0; }
+    body {
+      font-family: monospace;
+      background-color: #111;
+      color: #00ff88;
+      text-align: center;
+      padding: 50px;
+    }
+    #qr {
+      margin-top: 20px;
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
   </style>
 </head>
 <body>
-  <h1>🕵️ Anonymous WhatsApp Linker</h1>
-  <p>Select your linking method:</p>
+  <h1>🤖 Anonymous WhatsApp Bot</h1>
+  <h2>🔗 Pair your device</h2>
+  <div id="qr"></div>
+  <p id="status">⏳ Waiting for QR...</p>
 
-  <button onclick="showQR()">Link with QR Code</button>
-  <button onclick="showPhoneInput()">Link with Phone Number</button>
-
-  <div id="qr" style="display:none;"></div>
-  <div id="phoneForm" style="display:none;">
-    <input id="phoneInput" placeholder="Enter phone number..." />
-    <button onclick="linkPhone()">Link</button>
-  </div>
-
-  <p id="status"></p>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    function showQR() {
-      document.getElementById('qr').style.display = 'block';
-      document.getElementById('phoneForm').style.display = 'none';
-      document.getElementById('status').innerText = 'Loading QR...';
+    let qrInstance;
 
-      fetch('/qr').then(res => res.json()).then(data => {
-        if (data.qr) {
-          document.getElementById('qr').innerHTML = `<img src="${data.qr}" alt="QR Code">`;
-          document.getElementById('status').innerText = 'Scan this code with your WhatsApp.';
-        } else {
-          document.getElementById('status').innerText = 'QR not available.';
-        }
-      }).catch(err => {
-        document.getElementById('status').innerText = 'Error fetching QR.';
-      });
-    }
+    async function updateQR() {
+      const res = await fetch('/api/session/qr');
+      const data = await res.json();
 
-    function showPhoneInput() {
-      document.getElementById('qr').style.display = 'none';
-      document.getElementById('phoneForm').style.display = 'block';
-      document.getElementById('status').innerText = '';
-    }
-
-    function linkPhone() {
-      const phone = document.getElementById('phoneInput').value;
-      if (!phone) {
-        document.getElementById('status').innerText = 'Please enter a phone number.';
-        return;
+      if (data.qr) {
+        document.getElementById("qr").innerHTML = "";
+        qrInstance = new QRCode(document.getElementById("qr"), data.qr);
       }
-
-      fetch('/link-phone', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone })
-      }).then(res => res.json()).then(data => {
-        document.getElementById('status').innerText = data.message;
-      }).catch(() => {
-        document.getElementById('status').innerText = 'Failed to link phone.';
-      });
     }
+
+    async function checkStatus() {
+      const res = await fetch('/api/session/status');
+      const data = await res.json();
+      const statusText = document.getElementById("status");
+
+      if (data.status === "connected") {
+        statusText.innerText = "✅ WhatsApp is connected!";
+        document.getElementById("qr").style.display = "none";
+      } else {
+        statusText.innerText = "⏳ Waiting for WhatsApp connection...";
+      }
+    }
+
+    setInterval(() => {
+      updateQR();
+      checkStatus();
+    }, 5000);
+
+    updateQR();
+    checkStatus();
   </script>
 </body>
 </html>
