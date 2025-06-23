@@ -2,73 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Anonymous Link</title>
-  <link rel="icon" href="favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: radial-gradient(circle at top, #111827, #000);
-      color: #0ff;
-      font-family: 'Orbitron', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-    #qr {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px #0ff;
-    }
-    .loader {
-      margin-top: 30px;
-      width: 48px;
-      height: 48px;
-      border: 6px solid #0ff;
-      border-bottom-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    audio {
-      position: absolute;
-      bottom: 20px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link Your WhatsApp – Anonymous Bot</title>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <h1>🔗 Link Your WhatsApp</h1>
-  <div id="qr">
-    <div class="loader"></div>
+  <div class="container">
+    <div class="glass-panel">
+      <img src="images/logo.png" alt="Bot Logo" class="logo" />
+      <h1>Link Your WhatsApp</h1>
+      <div id="qr-container">
+        <div class="loader-circle"></div>
+        <canvas id="qrCanvas"></canvas>
+      </div>
+      <div id="status" class="status disconnected">Disconnected</div>
+      <button id="reconnectBtn" class="btn">Reconnect</button>
+    </div>
+    <div id="music-player">
+      <audio id="bg-music" src="music/ncs.mp3" loop></audio>
+      <button id="playBtn">🎵</button>
+    </div>
   </div>
-  <audio autoplay loop>
-    <source src="https://ncs.io/track/download/442dfd89-c291-41b4-b93a-18c0ff73c1dc" type="audio/mpeg">
-  </audio>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const qrContainer = document.getElementById('qr');
-
-    socket.on('qr', (dataURL) => {
-      qrContainer.innerHTML = `<img src="${dataURL}" style="width:300px; height:300px;" alt="QR Code">`;
-    });
-
-    socket.on('ready', () => {
-      qrContainer.innerHTML = "<h2>✅ WhatsApp is linked!</h2>";
-    });
-  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js"></script>
+  <script src="scripts/main.js"></script>
 </body>
 </html>
