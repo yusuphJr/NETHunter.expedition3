@@ -1,71 +1,62 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const express = require('express');
-const qrcode = require('qrcode-terminal');
+const qrcode = require('qrcode');
 const fs = require('fs');
 const cors = require('cors');
 const path = require('path');
+const http = require('http');
+const socketIO = require('socket.io');
 
-// Firebase DB connection
-const db = require('./firebaseService');
-
-// Init Express
 const app = express();
-app.use(express.json());
+const server = http.createServer(app);
+const io = socketIO(server);
+
+// Middlewares
 app.use(cors());
-app.use(express.static('public')); // serve frontend
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'frontend/public')));
 
-// WhatsApp client init
+// WhatsApp client
 const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }
+  authStrategy: new LocalAuth(),
+  puppeteer: {
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  }
 });
 
-// QR Code generation
+// QR event
 client.on('qr', async (qr) => {
-    qrcode.generate(qr, { small: true });
-    console.log('📲 QR RECEIVED - scan in WhatsApp');
-
-    await db.ref('sessions/anonymous').set({
-        qr: qr,
-        status: 'waiting'
-    });
+  console.log('QR RECEIVED. Sending to client...');
+  const qrDataURL = await qrcode.toDataURL(qr);
+  io.emit('qr', qrDataURL);
 });
 
-// Bot is ready
-client.on('ready', async () => {
-    await db.ref('sessions/anonymous/status').set('connected');
-    console.log('✅ WhatsApp Bot is ready!');
+// Ready event
+client.on('ready', () => {
+  console.log('✅ WhatsApp Bot is ready!');
+  io.emit('ready', 'WhatsApp is ready!');
 });
 
 // Message handler
-client.on('message', async (msg) => {
-    console.log(`[${msg.from}]: ${msg.body}`);
-    if (msg.body === 'ping') msg.reply('pong');
-
-    fs.appendFileSync('message_logs.txt', `[${msg.from}] ${msg.body}\n`);
+client.on('message', (msg) => {
+  console.log(`[${msg.from}]: ${msg.body}`);
+  if (msg.body === 'ping') {
+    msg.reply('pong');
+  }
+  fs.appendFileSync('message_logs.txt', `[${msg.from}] ${msg.body}\n`);
 });
 
-// Start WhatsApp
+// Start bot
 client.initialize();
 
-// Routes
+// Serve frontend
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'frontend/public/index.html'));
 });
 
-app.get('/api/session/qr', async (req, res) => {
-    const snapshot = await db.ref('sessions/anonymous/qr').once('value');
-    res.json({ qr: snapshot.val() });
-});
-
-app.get('/api/session/status', async (req, res) => {
-    const snapshot = await db.ref('sessions/anonymous/status').once('value');
-    res.json({ status: snapshot.val() });
-});
-
-app.listen(3000, () => {
-    console.log('🌐 Express server running at http://localhost:3000');
+// Start server
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`🌐 Server is running at http://localhost:${PORT}`);
 });
