@@ -9,8 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, 'frontend', 'public')));
+// ✅ Serve static files from the correct folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // WhatsApp client setup
 const client = new Client({
@@ -21,25 +21,25 @@ const client = new Client({
     }
 });
 
-// Send QR code to frontend
+// Send QR code as base64
 let latestQr = '';
 client.on('qr', async (qr) => {
     console.log('QR RECEIVED. Sending to client...');
     latestQr = await qrcode.toDataURL(qr);
 });
 
-// Send QR to frontend
+// Endpoint for frontend to fetch QR
 app.get('/api/qr', (req, res) => {
     if (!latestQr) return res.status(404).send('QR not ready');
     res.json({ qr: latestQr });
 });
 
-// WhatsApp ready
+// WhatsApp ready log
 client.on('ready', () => {
     console.log('✅ WhatsApp Bot is ready!');
 });
 
-// Message listener
+// Basic message handling
 client.on('message', async (msg) => {
     console.log(`[${msg.from}]: ${msg.body}`);
     if (msg.body === 'ping') {
@@ -50,9 +50,9 @@ client.on('message', async (msg) => {
 
 client.initialize();
 
-// Root route for frontend
+// ✅ Serve your main index.html properly
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 10000;
