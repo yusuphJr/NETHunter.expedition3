@@ -1,30 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Link Your WhatsApp – Anonymous Bot</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Link Your WhatsApp</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="main.js"></script>
+  <link rel="icon" href="whatsapp-icon.png">
 </head>
 <body>
-  <div class="container">
-    <div class="glass-panel">
-      <img src="images/logo.png" alt="Bot Logo" class="logo" />
-      <h1>Link Your WhatsApp</h1>
-      <div id="qr-container">
-        <div class="loader-circle"></div>
-        <canvas id="qrCanvas"></canvas>
-      </div>
-      <div id="status" class="status disconnected">Disconnected</div>
-      <button id="reconnectBtn" class="btn">Reconnect</button>
-    </div>
-    <div id="music-player">
-      <audio id="bg-music" src="music/ncs.mp3" loop></audio>
-      <button id="playBtn">🎵</button>
+  <div class="glass">
+    <h1>Link Your WhatsApp</h1>
+    <div id="status" class="status">Status: <span>Loading...</span></div>
+    <canvas id="qrcode"></canvas>
+    <div class="btns">
+      <button id="refreshBtn">🔄 Refresh</button>
+      <button id="reconnectBtn">🔌 Reconnect</button>
     </div>
   </div>
-  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database.js"></script>
-  <script src="scripts/main.js"></script>
 </body>
 </html>
