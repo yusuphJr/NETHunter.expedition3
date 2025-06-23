@@ -3,64 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🔐 Anonymous WhatsApp Bot</title>
+  <title>Anonymous Link</title>
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: monospace;
-      background-color: #111;
-      color: #00ff88;
-      text-align: center;
-      padding: 50px;
+      background: radial-gradient(circle at top, #111827, #000);
+      color: #0ff;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
     }
     #qr {
-      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #0ff;
     }
-    #status {
-      margin-top: 20px;
-      font-size: 1.2em;
+    .loader {
+      margin-top: 30px;
+      width: 48px;
+      height: 48px;
+      border: 6px solid #0ff;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    audio {
+      position: absolute;
+      bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>🤖 Anonymous WhatsApp Bot</h1>
-  <h2>🔗 Pair your device</h2>
-  <div id="qr"></div>
-  <p id="status">⏳ Waiting for QR...</p>
+  <h1>🔗 Link Your WhatsApp</h1>
+  <div id="qr">
+    <div class="loader"></div>
+  </div>
+  <audio autoplay loop>
+    <source src="https://ncs.io/track/download/442dfd89-c291-41b4-b93a-18c0ff73c1dc" type="audio/mpeg">
+  </audio>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script>
-    let qrInstance;
+    const socket = io();
+    const qrContainer = document.getElementById('qr');
 
-    async function updateQR() {
-      const res = await fetch('/api/session/qr');
-      const data = await res.json();
+    socket.on('qr', (dataURL) => {
+      qrContainer.innerHTML = `<img src="${dataURL}" style="width:300px; height:300px;" alt="QR Code">`;
+    });
 
-      if (data.qr) {
-        document.getElementById("qr").innerHTML = "";
-        qrInstance = new QRCode(document.getElementById("qr"), data.qr);
-      }
-    }
-
-    async function checkStatus() {
-      const res = await fetch('/api/session/status');
-      const data = await res.json();
-      const statusText = document.getElementById("status");
-
-      if (data.status === "connected") {
-        statusText.innerText = "✅ WhatsApp is connected!";
-        document.getElementById("qr").style.display = "none";
-      } else {
-        statusText.innerText = "⏳ Waiting for WhatsApp connection...";
-      }
-    }
-
-    setInterval(() => {
-      updateQR();
-      checkStatus();
-    }, 5000);
-
-    updateQR();
-    checkStatus();
+    socket.on('ready', () => {
+      qrContainer.innerHTML = "<h2>✅ WhatsApp is linked!</h2>";
+    });
   </script>
 </body>
 </html>
