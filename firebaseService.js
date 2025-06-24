@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./anonymous-bot-d6875-firebase-adminsdk-fbsvc-00c277c166.json'); // Replace with your file name if needed
+const serviceAccount = require('./anonymous-bot-d6875-firebase-adminsdk-fbsvc-8757389a7f.json'); // Replace with your file name if needed
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
