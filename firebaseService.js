@@ -1,10 +1,8 @@
-const admin = require('firebase-admin');
-const serviceAccount = require('./anonymous-bot-d6875-firebase-adminsdk-fbsvc-8757389a7f.json'); // Replace with your file name if needed
+var admin = require("firebase-admin");
+
+var serviceAccount = require("path/to/serviceAccountKey.json");
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://anonymous-bot-d6875-default-rtdb.firebaseio.com'
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://anonymous-bot-d6875-default-rtdb.firebaseio.com"
 });
-
-const db = admin.database();
-module.exports = db;
