@@ -6,7 +6,7 @@ const axios = require("axios");
 const DATABASE_URL = "https://anonymous-bot-d6875-default-rtdb.firebaseio.com";
 
 // Service Account JSON – get from Firebase Console > Project Settings > Service Accounts
-const serviceAccount = require("../serviceAccountKey.json"); // << You must download this manually and keep it safe
+const serviceAccount = require("../anonymous-bot-d6875-firebase-adminsdk-fbsvc-9cf8d83abf.json"); // << You must download this manually and keep it safe
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
