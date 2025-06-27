@@ -4,13 +4,13 @@ import QRCode from 'https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.j
 
 // Firebase Config (Replace with your actual values)
 const firebaseConfig = {
-  apiKey: "AIzaSyB1dXaGbG_RPh-wsTFJ8wtu24yiIijd8xU",
-  authDomain: "anonymous-bot-d6875.firebaseapp.com",
-  databaseURL: "https://anonymous-bot-d6875-default-rtdb.firebaseio.com",
-  projectId: "anonymous-bot-d6875",
-  storageBucket: "anonymous-bot-d6875.firebasestorage.app",
-  messagingSenderId: "892491758317",
-  appId: "1:892491758317:web:de79b9b701abdfca29eae4"
+  apiKey: "AIzaSyAsZp1qE5VTzVJO3H9eZwjqWkV3YvpyJ_4",
+  authDomain: "anon-bot-a8a5e.firebaseapp.com",
+  projectId: "anon-bot-a8a5e",
+  storageBucket: "anon-bot-a8a5e.firebasestorage.app",
+  messagingSenderId: "508890097191",
+  appId: "1:508890097191:web:3ec054ba0bfffff6ce5002",
+  measurementId: "G-0GWDNEXQSB"
 };
 
 // Initialize Firebase
