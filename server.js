@@ -9,10 +9,10 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 // 🔐 Firebase Admin Init
-const serviceAccount = require('./anonymous-bot-d6875-firebase-adminsdk-fbsvc-9cf8d83abf.json');
+const serviceAccount = require('./anon-bot-key.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://anonymous-bot-d6875-default-rtdb.firebaseio.com"
+  databaseURL: "https://anon-bot-a8a5e-default-rtdb.firebaseio.com"
 });
 const db = admin.database();
 const sessionRef = db.ref('sessions/current');
